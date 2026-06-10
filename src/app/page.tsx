@@ -6,14 +6,17 @@ import { givingAccounts, massSchedule, officialSiteUrl, parishContact, parishSto
 
 const parishHighlights = [
   {
+    icon: 'place',
     value: 'Koszalin · Jamno',
     label: 'wspólnota parafialna i kościół filialny',
   },
   {
+    icon: 'event_available',
     value: parishContact.founded,
     label: 'data wejścia w życie dekretu erygującego parafię',
   },
   {
+    icon: 'schedule',
     value: 'Msze i kontakt',
     label: 'najważniejsze informacje dostępne od razu na starcie',
   },
@@ -22,16 +25,19 @@ const parishHighlights = [
 const quickLinks = [
   {
     href: '/announcements',
+    icon: 'campaign',
     title: 'Ogłoszenia parafialne',
     description: 'Skrót najnowszych komunikatów duszpasterskich i link do pełnej treści na stronie parafii.',
   },
   {
     href: '/events',
+    icon: 'celebration',
     title: 'Wydarzenia i nabożeństwa',
     description: 'Nabożeństwa czerwcowe, transmisje online i inicjatywy, które warto mieć pod ręką.',
   },
   {
     href: '/community',
+    icon: 'groups',
     title: 'Wspólnota online',
     description: 'Miejsce na intencje, pytania organizacyjne oraz pomoc sąsiedzką w duchu św. Matki Teresy.',
   },
@@ -64,20 +70,26 @@ const parishPhotos = [
   },
 ]
 
+const heroBadges = ['Ogłoszenia', 'Msze święte', 'Transmisje online']
+
 export default function HomePage() {
   return (
     <div className='stack home-stack'>
       <section className='hero parish-hero'>
         <div className='hero-copy'>
+          <div className='hero-chip'><span className='material-symbol' aria-hidden='true'>auto_awesome</span> Nowa parafialna aplikacja</div>
           <p className='eyebrow'>Parafia rzymskokatolicka w Koszalinie</p>
           <h1>Parafia św. Matki Teresy z Kalkuty</h1>
           <p className='lead'>
             Przejrzysta strona startowa dla parafian i gości: aktualne ogłoszenia, godziny Mszy Świętych,
             kontakt do duszpasterzy, transmisje online oraz przestrzeń rozmowy wspólnoty.
           </p>
-          <div className='actions'>
-            <Link className='button' href='/announcements'>Sprawdź ogłoszenia</Link>
-            <Link className='button secondary' href='#msze'>Godziny Mszy Św.</Link>
+          <div className='actions hero-actions'>
+            <Link className='button' href='/announcements'><span className='material-symbol' aria-hidden='true'>campaign</span> Sprawdź ogłoszenia</Link>
+            <Link className='button secondary' href='#msze'><span className='material-symbol' aria-hidden='true'>schedule</span> Godziny Mszy Św.</Link>
+          </div>
+          <div className='hero-badges' aria-label='Najważniejsze funkcje'>
+            {heroBadges.map(item => <span key={item}>{item}</span>)}
           </div>
         </div>
         <div className='hero-visual' aria-label='Zdjęcie i wizytówka parafii'>
@@ -89,19 +101,22 @@ export default function HomePage() {
             priority
             sizes='(min-width: 920px) 48vw, 100vw'
           />
-          <div className='hero-card'>
+          <div className='hero-card floating-card'>
             <div className='hero-mark'>MT</div>
             <p className='hero-card-label'>Adres kancelarii</p>
             <strong>{parishContact.address}</strong>
-            <span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
-            <span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
+            <span><span className='material-symbol' aria-hidden='true'>person</span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
+            <span><span className='material-symbol' aria-hidden='true'>call</span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
           </div>
+          <div className='hero-orbit hero-orbit-one'><span className='material-symbol' aria-hidden='true'>church</span></div>
+          <div className='hero-orbit hero-orbit-two'><span className='material-symbol' aria-hidden='true'>favorite</span></div>
         </div>
       </section>
 
       <section className='highlight-grid' aria-label='Najważniejsze informacje o parafii'>
         {parishHighlights.map(item => (
           <article className='stat-card' key={item.value}>
+            <span className='icon-bubble material-symbol' aria-hidden='true'>{item.icon}</span>
             <strong>{item.value}</strong>
             <span>{item.label}</span>
           </article>
@@ -109,12 +124,13 @@ export default function HomePage() {
       </section>
 
       <section className='split-section priority-section'>
-        <article id='msze' className='card schedule-card'>
+        <article id='msze' className='card schedule-card elevated-card'>
           <p className='eyebrow'>Msze święte i nabożeństwa</p>
           <h2>Plan liturgii</h2>
           <div className='schedule-grid'>
             {massSchedule.map(place => (
               <div className='schedule-place' key={place.place}>
+                <span className='schedule-icon material-symbol' aria-hidden='true'>church</span>
                 <h3>{place.place}</h3>
                 {place.rows.map(row => (
                   <p key={row.label}>
@@ -126,7 +142,8 @@ export default function HomePage() {
             ))}
           </div>
         </article>
-        <article className='card online-card'>
+        <article className='card online-card elevated-card visual-panel'>
+          <span className='panel-icon material-symbol' aria-hidden='true'>play_circle</span>
           <p className='eyebrow'>Online</p>
           <h2>Transmisje z Jamna</h2>
           <p>
@@ -134,17 +151,16 @@ export default function HomePage() {
             Różańcowej w Jamnie. Ostatni wskazany termin to niedziela, godz. 10:00.
           </p>
           <div className='actions'>
-            <a className='button' href={youtubeUrl} target='_blank' rel='noreferrer'>Otwórz YouTube</a>
+            <a className='button' href={youtubeUrl} target='_blank' rel='noreferrer'><span className='material-symbol' aria-hidden='true'>smart_display</span> Otwórz YouTube</a>
             <a className='button secondary' href={officialSiteUrl} target='_blank' rel='noreferrer'>Strona parafii</a>
           </div>
         </article>
       </section>
 
-
       <section className='photo-section' aria-label='Zdjęcia parafialne'>
         <div className='section-heading photo-heading'>
           <p className='eyebrow'>Zdjęcia i klimat miejsca</p>
-          <h2>Strona od razu wygląda jak żywa parafia, nie jak surowy panel</h2>
+          <h2>Landing page, który od razu prowadzi parafian do najważniejszych spraw</h2>
         </div>
         <div className='photo-grid'>
           {parishPhotos.map((photo, index) => (
@@ -172,6 +188,7 @@ export default function HomePage() {
         <div className='cards feature-cards'>
           {quickLinks.map(item => (
             <article className='card feature-card' key={item.href}>
+              <span className='feature-icon material-symbol' aria-hidden='true'>{item.icon}</span>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <Link href={item.href}>Przejdź dalej</Link>
@@ -223,7 +240,7 @@ export default function HomePage() {
           <p>{parishContact.pastor}: <a href={`tel:${parishContact.pastorPhone.replaceAll(' ', '')}`}>{parishContact.pastorPhone}</a></p>
           <p>{parishContact.vicar} ({parishContact.vicarNote}): <a href={`tel:${parishContact.vicarPhone.replaceAll(' ', '')}`}>{parishContact.vicarPhone}</a></p>
         </div>
-        <Link className='button secondary' href='/community'>Zadaj pytanie we wspólnocie</Link>
+        <Link className='button secondary' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Zadaj pytanie we wspólnocie</Link>
       </section>
     </div>
   )
