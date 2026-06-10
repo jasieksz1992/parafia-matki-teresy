@@ -19,14 +19,22 @@ export function reportsRef() {
   return collection(db, 'parishes', parishId, 'reports')
 }
 
-export function observeAnnouncements(callback: (items: Announcement[]) => void, onlyPublished = true) {
+export function observeAnnouncements(callback: (items: Announcement[]) => void, onlyPublished = true, onError?: (error: Error) => void) {
   const q = query(announcementsRef, where('isPublished', '==', onlyPublished), orderBy('isPinned', 'desc'), orderBy('createdAt', 'desc'), limit(50))
-  return onSnapshot(q, snapshot => callback(snapshot.docs.map(item => ({ id: item.id, ...item.data() }) as Announcement)))
+  return onSnapshot(
+    q,
+    snapshot => callback(snapshot.docs.map(item => ({ id: item.id, ...item.data() }) as Announcement)),
+    error => onError?.(error)
+  )
 }
 
-export function observeEvents(callback: (items: ParishEvent[]) => void, onlyPublished = true) {
+export function observeEvents(callback: (items: ParishEvent[]) => void, onlyPublished = true, onError?: (error: Error) => void) {
   const q = query(eventsRef, where('isPublished', '==', onlyPublished), orderBy('startAt', 'asc'), limit(50))
-  return onSnapshot(q, snapshot => callback(snapshot.docs.map(item => ({ id: item.id, ...item.data() }) as ParishEvent)))
+  return onSnapshot(
+    q,
+    snapshot => callback(snapshot.docs.map(item => ({ id: item.id, ...item.data() }) as ParishEvent)),
+    error => onError?.(error)
+  )
 }
 
 export function observeRooms(callback: (items: Room[]) => void, onlyActive = true) {
