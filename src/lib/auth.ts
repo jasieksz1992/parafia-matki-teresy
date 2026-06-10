@@ -1,6 +1,6 @@
 'use client'
 
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, type User } from 'firebase/auth'
 import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
 import { parishId } from './constants'
@@ -10,6 +10,22 @@ const provider = new GoogleAuthProvider()
 
 export function loginWithGoogle() {
   return signInWithPopup(auth, provider)
+}
+
+export function loginWithEmail(email: string, password: string) {
+  return signInWithEmailAndPassword(auth, email.trim(), password)
+}
+
+export async function registerWithEmail(email: string, password: string, displayName: string) {
+  const credential = await createUserWithEmailAndPassword(auth, email.trim(), password)
+  const trimmedName = displayName.trim()
+
+  if (trimmedName) {
+    await updateProfile(credential.user, { displayName: trimmedName })
+  }
+
+  await ensureMember(credential.user)
+  return credential
 }
 
 export function logout() {

@@ -1,6 +1,7 @@
 'use client'
 
-import { loginWithGoogle, logout } from '@/lib/auth'
+import Link from 'next/link'
+import { logout } from '@/lib/auth'
 import { useAuth } from './AuthProvider'
 
 export default function LoginButton() {
@@ -10,5 +11,5 @@ export default function LoginButton() {
     return <button className='button secondary' onClick={() => logout()}>Wyloguj</button>
   }
 
-  return <button className='button' onClick={() => loginWithGoogle()}>Zaloguj</button>
+  return <Link className='button' href='/login'>Zaloguj / Rejestracja</Link>
 }
