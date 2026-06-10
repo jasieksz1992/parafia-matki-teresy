@@ -10,8 +10,7 @@ const links = [
   ['/announcements', 'Ogłoszenia'],
   ['/events', 'Wydarzenia'],
   ['/community', 'Wspólnota'],
-  ['/#kontakt', 'Kontakt'],
-  ['/admin', 'Panel']
+  ['/#kontakt', 'Kontakt']
 ]
 
 export default function AppHeader() {
@@ -29,7 +28,6 @@ export default function AppHeader() {
         ))}
       </nav>
       <div className='header-actions'>
-        <UserBadge />
         <LoginButton />
       </div>
     </header>

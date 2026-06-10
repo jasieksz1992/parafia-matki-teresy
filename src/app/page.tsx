@@ -85,7 +85,7 @@ const parishPhotos = [
   },
 ]
 
-const heroBadges = ['Niedziela 10:00', 'Ogłoszenia', 'Transmisje online']
+const heroBadges = ['Niedziela 10:00', 'Ogłoszenia']
 
 const announcementSlides = [
   {
@@ -221,15 +221,6 @@ export default function HomePage() {
             ))}
           </div>
           <ChurchLoaderMark className='hero-church-mark' />
-          <div className='hero-card floating-card'>
-            <div className='hero-mark'>MT</div>
-            <p className='hero-card-label'>Adres kancelarii</p>
-            <strong>{parishContact.address}</strong>
-            <span><span className='material-symbol' aria-hidden='true'>person</span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
-            <span><span className='material-symbol' aria-hidden='true'>call</span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
-          </div>
-          <div className='hero-orbit hero-orbit-one'><span className='material-symbol' aria-hidden='true'>church</span></div>
-          <div className='hero-orbit hero-orbit-two'><span className='material-symbol' aria-hidden='true'>favorite</span></div>
         </div>
       </section>
 
@@ -341,31 +332,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className='split-section parish-matters-section'>
-        <div className='media-slider' aria-label='Slider spraw parafialnych'>
-          {parishMatterSlides.map(item => (
-            <article className='media-slide' key={item.title}>
-              <Image src={item.image} alt='' fill sizes='(min-width: 920px) 42vw, 100vw' />
-              <div>
-                <span className='feature-icon material-symbol' aria-hidden='true'>{item.icon}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className='content-panel'>
-          <p className='eyebrow'>Sprawy parafii</p>
-          <h2>Wydarzenia, intencje i codzienne potrzeby wspólnoty</h2>
-          <p className='section-lead'>Ta część łączy kalendarz z jasnym zaproszeniem do rozmowy — od nabożeństw po zwykłe pytania organizacyjne.</p>
-          <EventList />
-          <div className='actions section-actions'>
-            <Link className='button' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Przejdź do wspólnoty</Link>
-            <Link className='button secondary' href='/events'><span className='material-symbol' aria-hidden='true'>event</span> Zobacz wydarzenia</Link>
-          </div>
-        </div>
-      </section>
-
       <section className='card mission-card'>
         <div>
           <p className='eyebrow'>Historia i duch patronki</p>
@@ -403,17 +369,6 @@ export default function HomePage() {
             <Link className='button' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Zadaj pytanie</Link>
             <a className='button secondary' href={officialSiteUrl} target='_blank' rel='noreferrer'><span className='material-symbol' aria-hidden='true'>language</span> Oficjalna strona</a>
           </div>
-        </div>
-        <div className='media-slider contact-slider' aria-label='Slider kontaktowy ze zdjęciami'>
-          {contactSlides.map(item => (
-            <article className='media-slide contact-slide' key={item.title}>
-              <Image src={item.image} alt='' fill sizes='(min-width: 920px) 42vw, 100vw' />
-              <div>
-                <p className='eyebrow'>{item.title}</p>
-                <h3>{item.text}</h3>
-              </div>
-            </article>
-          ))}
         </div>
       </section>
     </div>

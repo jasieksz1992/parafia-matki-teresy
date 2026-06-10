@@ -931,10 +931,6 @@ textarea {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .contact-card {
-    grid-template-columns: 1fr auto;
-  }
-
   .schedule-grid,
   .giving-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
