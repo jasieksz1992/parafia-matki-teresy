@@ -6,7 +6,7 @@ import LoginButton from './LoginButton'
 import UserBadge from './UserBadge'
 
 const links = [
-  ['/', 'Home'],
+  ['/', 'Start'],
   ['/announcements', 'Ogłoszenia'],
   ['/events', 'Wydarzenia'],
   ['/community', 'Wspólnota'],
@@ -20,8 +20,8 @@ export default function AppHeader() {
   return (
     <header className='site-header'>
       <Link className='brand' href='/'>
-        <span>Parafia</span>
-        <strong>Matki Teresy</strong>
+        <span>Parafia Koszalin</span>
+        <strong>Matki Teresy z Kalkuty</strong>
       </Link>
       <nav aria-label='Główna nawigacja'>
         {links.map(([href, label]) => (

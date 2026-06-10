@@ -5,8 +5,8 @@ import { AuthProvider } from '@/components/AuthProvider'
 import AppLayout from '@/components/AppLayout'
 
 export const metadata: Metadata = {
-  title: 'Parafia Matki Teresy',
-  description: 'Aplikacja wspólnoty parafialnej Kościoła pw. św. Matki Teresy z Kalkuty',
+  title: 'Parafia Matki Teresy z Kalkuty w Koszalinie',
+  description: 'Aplikacja wspólnoty parafialnej Kościoła pw. św. Matki Teresy z Kalkuty w Koszalinie',
   manifest: '/manifest.webmanifest'
 }
 
