@@ -70,7 +70,33 @@ const parishPhotos = [
   },
 ]
 
-const heroBadges = ['Ogłoszenia', 'Msze święte', 'Transmisje online']
+const heroBadges = ['Niedziela 10:00', 'Ogłoszenia', 'Transmisje online']
+
+function ChurchLoaderMark({ className = '' }: { className?: string }) {
+  return (
+    <svg className={`church-loader-mark ${className}`} viewBox='0 0 180 180' role='img' aria-label='Animowany znak kościoła'>
+      <defs>
+        <linearGradient id='churchGold' x1='28' x2='154' y1='150' y2='18' gradientUnits='userSpaceOnUse'>
+          <stop stopColor='#ff5a35' />
+          <stop offset='0.55' stopColor='#f6b54d' />
+          <stop offset='1' stopColor='#fff2cf' />
+        </linearGradient>
+        <filter id='churchGlow' x='-25%' y='-25%' width='150%' height='150%'>
+          <feGaussianBlur stdDeviation='5' result='blur' />
+          <feMerge>
+            <feMergeNode in='blur' />
+            <feMergeNode in='SourceGraphic' />
+          </feMerge>
+        </filter>
+      </defs>
+      <circle className='church-loader-mark__halo' cx='90' cy='90' r='78' />
+      <path className='church-loader-mark__stroke church-loader-mark__roof' d='M30 150V82L90 32l60 50v68' />
+      <path className='church-loader-mark__stroke church-loader-mark__body' d='M48 150V92h84v58M72 150v-28a18 18 0 0 1 36 0v28' />
+      <path className='church-loader-mark__stroke church-loader-mark__cross' d='M90 20v38M74 38h32' />
+      <path className='church-loader-mark__stroke church-loader-mark__window' d='M65 112V96M115 112V96' />
+    </svg>
+  )
+}
 
 export default function HomePage() {
   return (
@@ -93,14 +119,17 @@ export default function HomePage() {
           </div>
         </div>
         <div className='hero-visual' aria-label='Zdjęcie i wizytówka parafii'>
-          <Image
-            className='hero-photo'
-            src={parishPhotos[0].src}
-            alt={parishPhotos[0].alt}
-            fill
-            priority
-            sizes='(min-width: 920px) 48vw, 100vw'
-          />
+          <div className='hero-photo-wrap'>
+            <Image
+              className='hero-photo'
+              src={parishPhotos[0].src}
+              alt={parishPhotos[0].alt}
+              fill
+              priority
+              sizes='(min-width: 920px) 48vw, 100vw'
+            />
+          </div>
+          <ChurchLoaderMark className='hero-church-mark' />
           <div className='hero-card floating-card'>
             <div className='hero-mark'>MT</div>
             <p className='hero-card-label'>Adres kancelarii</p>
