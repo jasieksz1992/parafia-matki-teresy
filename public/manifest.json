@@ -1,0 +1,9 @@
+{
+  "name": "Parafia św. Matki Teresy z Kalkuty",
+  "short_name": "Parafia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ec",
+  "theme_color": "#365314",
+  "lang": "pl"
+}

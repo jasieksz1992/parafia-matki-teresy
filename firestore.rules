@@ -1,0 +1,151 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function parishUser(parishId) {
+      return get(/databases/$(database)/documents/parishes/$(parishId)/users/$(request.auth.uid));
+    }
+
+    function isMember(parishId) {
+      return signedIn() && exists(/databases/$(database)/documents/parishes/$(parishId)/users/$(request.auth.uid));
+    }
+
+    function notBanned(parishId) {
+      return isMember(parishId) && parishUser(parishId).data.banned != true;
+    }
+
+    function acceptedRules(parishId) {
+      return notBanned(parishId) && parishUser(parishId).data.acceptedRulesAt is timestamp;
+    }
+
+    function isModerator(parishId) {
+      return signedIn() && (parishUser(parishId).data.role in ['moderator', 'admin', 'superadmin']);
+    }
+
+    function isAdmin(parishId) {
+      return signedIn() && (parishUser(parishId).data.role in ['admin', 'superadmin']);
+    }
+
+    function isSuperadmin(parishId) {
+      return signedIn() && parishUser(parishId).data.role == 'superadmin';
+    }
+
+    function validRoomCategory() {
+      return request.resource.data.category in ['official', 'prayer', 'help', 'groups', 'casual'];
+    }
+
+    function validRoom() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 200
+        && validRoomCategory()
+        && request.resource.data.createdAt == request.time;
+    }
+
+    function validMessage() {
+      return request.resource.data.uid == request.auth.uid
+        && request.resource.data.authorName is string
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 1000
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.deleted == false
+        && request.resource.data.mentions is list
+        && request.resource.data.mentions.size() <= 20
+        && (!('replyToMessageId' in request.resource.data) || request.resource.data.replyToMessageId is string)
+        && (!('replyToText' in request.resource.data) || request.resource.data.replyToText.size() <= 160)
+        && (!('replyToAuthorName' in request.resource.data) || request.resource.data.replyToAuthorName is string);
+    }
+
+    function validReaction() {
+      return request.resource.data.uid == request.auth.uid
+        && request.resource.data.emoji in ['🙏', '❤️', '👍']
+        && request.resource.data.createdAt == request.time;
+    }
+
+    match /parishes/{parishId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /users/{userId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && userId == request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.role == 'member'
+          && request.resource.data.banned == false;
+        allow update: if signedIn() && (
+          userId == request.auth.uid
+          && !('role' in request.resource.data.diff(resource.data).changedKeys())
+          && !('banned' in request.resource.data.diff(resource.data).changedKeys())
+          || isSuperadmin(parishId)
+          && request.resource.data.role != 'superadmin'
+          || isAdmin(parishId)
+          && resource.data.role in ['member', 'moderator']
+          && request.resource.data.role in ['member', 'moderator']
+        );
+        allow delete: if false;
+      }
+
+      match /rooms/{roomId} {
+        allow read: if true;
+        allow create: if isModerator(parishId)
+          && validRoom()
+          && (request.resource.data.category != 'official' || isAdmin(parishId))
+          && (request.resource.data.official != true || isAdmin(parishId));
+        allow update: if isModerator(parishId)
+          && request.resource.data.name is string
+          && request.resource.data.name.size() >= 3
+          && request.resource.data.name.size() <= 80
+          && request.resource.data.description is string
+          && request.resource.data.description.size() <= 200
+          && validRoomCategory()
+          && ((!('official' in request.resource.data.diff(resource.data).changedKeys())
+          && !('category' in request.resource.data.diff(resource.data).changedKeys())) || isAdmin(parishId))
+          && (request.resource.data.category != 'official' || isAdmin(parishId))
+          && (request.resource.data.official != true || isAdmin(parishId));
+        allow delete: if isAdmin(parishId);
+
+        match /messages/{messageId} {
+          allow read: if true;
+          allow create: if acceptedRules(parishId)
+            && get(/databases/$(database)/documents/parishes/$(parishId)/rooms/$(roomId)).data.closed != true
+            && validMessage();
+          allow update: if isModerator(parishId)
+            && request.resource.data.deleted == true
+            && request.resource.data.text.size() == 0;
+          allow delete: if false;
+
+          match /reactions/{userId} {
+            allow read: if true;
+            allow create, update: if acceptedRules(parishId)
+              && userId == request.auth.uid
+              && validReaction()
+              && get(/databases/$(database)/documents/parishes/$(parishId)/rooms/$(roomId)/messages/$(messageId)).data.deleted != true;
+            allow delete: if signedIn() && userId == request.auth.uid;
+          }
+        }
+      }
+
+      match /reports/{reportId} {
+        allow read: if isModerator(parishId);
+        allow create: if acceptedRules(parishId)
+          && request.resource.data.reporterUid == request.auth.uid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.reason is string
+          && request.resource.data.reason.size() <= 300;
+        allow update: if isModerator(parishId)
+          && request.resource.data.status in ['pending', 'reviewed', 'dismissed']
+          && request.resource.data.reviewedBy == request.auth.uid
+          && request.resource.data.reviewedAt == request.time;
+        allow delete: if false;
+      }
+    }
+  }
+}
