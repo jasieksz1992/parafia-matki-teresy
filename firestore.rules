@@ -1,0 +1,232 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null
+    }
+
+    function memberPath(parishId, uid) {
+      return /databases/$(database)/documents/parishes/$(parishId)/members/$(uid)
+    }
+
+    function myMember(parishId) {
+      return get(memberPath(parishId, request.auth.uid))
+    }
+
+    function myRole(parishId) {
+      return signedIn() && exists(memberPath(parishId, request.auth.uid)) ? myMember(parishId).data.role : 'guest'
+    }
+
+    function isRole(parishId, roles) {
+      return signedIn() && myRole(parishId) in roles
+    }
+
+    function canWriteCommunity(parishId) {
+      return signedIn()
+        && exists(memberPath(parishId, request.auth.uid))
+        && myMember(parishId).data.isBanned == false
+        && myMember(parishId).data.acceptedRulesAt is timestamp
+    }
+
+    function validMemberCreate(parishId, uid) {
+      return signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['uid', 'parishId', 'role', 'displayName', 'email', 'photoURL', 'isBanned', 'createdAt', 'updatedAt', 'acceptedRulesAt'])
+        && request.resource.data.uid == uid
+        && request.resource.data.parishId == parishId
+        && request.resource.data.role == 'user'
+        && request.resource.data.isBanned == false
+        && request.resource.data.displayName is string
+        && request.resource.data.email is string
+        && request.resource.data.photoURL is string
+    }
+
+    function validOwnMemberUpdate(parishId, uid) {
+      return signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['displayName', 'email', 'photoURL', 'updatedAt', 'acceptedRulesAt'])
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.isBanned == resource.data.isBanned
+        && request.resource.data.uid == uid
+        && request.resource.data.parishId == parishId
+    }
+
+    function validRoleChange(parishId) {
+      return signedIn()
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['role', 'updatedAt'])
+        && request.resource.data.role in ['user', 'moderator', 'admin']
+        && (
+          myRole(parishId) == 'superadmin'
+          || (
+            myRole(parishId) == 'admin'
+            && resource.data.role in ['user', 'moderator']
+            && request.resource.data.role in ['user', 'moderator']
+          )
+        )
+    }
+
+
+    function validBanMemberUpdate(parishId) {
+      return signedIn()
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['isBanned', 'updatedAt'])
+        && request.resource.data.isBanned == true
+        && (
+          myRole(parishId) == 'superadmin'
+          || (
+            myRole(parishId) == 'admin'
+            && resource.data.role in ['user', 'moderator']
+          )
+          || (
+            myRole(parishId) == 'moderator'
+            && resource.data.role == 'user'
+          )
+        )
+    }
+
+    function validBanWrite(parishId, uid) {
+      return isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        && request.resource.data.keys().hasOnly(['uid', 'reason', 'createdBy', 'createdAt', 'active'])
+        && request.resource.data.uid == uid
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() > 0
+        && request.resource.data.reason.size() <= 500
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.active == true
+    }
+
+    function validRoomCreate(parishId) {
+      return isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        && request.resource.data.keys().hasOnly(['name', 'description', 'createdBy', 'createdAt', 'updatedAt', 'isActive', 'isOfficial'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 500
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.isActive == true
+        && request.resource.data.isOfficial is bool
+    }
+
+    function validRoomUpdate(parishId) {
+      return isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['isActive', 'updatedAt'])
+        && request.resource.data.isActive == false
+    }
+
+    function validMessageCreate(parishId, roomId) {
+      return canWriteCommunity(parishId)
+        && get(/databases/$(database)/documents/parishes/$(parishId)/rooms/$(roomId)).data.isActive == true
+        && request.resource.data.keys().hasOnly(['text', 'authorId', 'authorName', 'createdAt', 'deletedAt', 'deletedBy', 'isDeleted'])
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 1000
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.authorName is string
+        && request.resource.data.authorName.size() > 0
+        && request.resource.data.deletedAt == null
+        && request.resource.data.deletedBy == ''
+        && request.resource.data.isDeleted == false
+    }
+
+    function validMessageDelete(parishId) {
+      return isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['isDeleted', 'deletedAt', 'deletedBy'])
+        && request.resource.data.text == resource.data.text
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.authorName == resource.data.authorName
+        && request.resource.data.isDeleted == true
+        && request.resource.data.deletedBy == request.auth.uid
+    }
+
+    function validReportCreate(parishId) {
+      return signedIn()
+        && request.resource.data.keys().hasOnly(['messageId', 'roomId', 'reason', 'createdBy', 'createdAt', 'status'])
+        && request.resource.data.messageId is string
+        && request.resource.data.roomId is string
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() > 0
+        && request.resource.data.reason.size() <= 500
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.status == 'open'
+    }
+
+    function validAnnouncement(parishId) {
+      return isRole(parishId, ['admin', 'superadmin'])
+        && request.resource.data.keys().hasOnly(['title', 'content', 'createdAt', 'updatedAt', 'createdBy', 'isPinned', 'isPublished'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 3
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 5000
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.isPinned is bool
+        && request.resource.data.isPublished is bool
+    }
+
+    function validEvent(parishId) {
+      return isRole(parishId, ['admin', 'superadmin'])
+        && request.resource.data.keys().hasOnly(['title', 'description', 'location', 'startAt', 'endAt', 'createdAt', 'updatedAt', 'createdBy', 'isPublished'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 3
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.location is string
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.isPublished is bool
+    }
+
+    match /parishes/{parishId} {
+      allow read: if signedIn()
+      allow create, update, delete: if myRole(parishId) == 'superadmin'
+
+      match /members/{uid} {
+        allow read: if signedIn()
+        allow create: if validMemberCreate(parishId, uid)
+        allow update: if validOwnMemberUpdate(parishId, uid) || validRoleChange(parishId) || validBanMemberUpdate(parishId)
+        allow delete: if false
+      }
+
+      match /rooms/{roomId} {
+        allow read: if signedIn() && resource.data.isActive == true
+        allow create: if validRoomCreate(parishId)
+        allow update: if validRoomUpdate(parishId)
+        allow delete: if false
+
+        match /messages/{messageId} {
+          allow read: if signedIn() && get(/databases/$(database)/documents/parishes/$(parishId)/rooms/$(roomId)).data.isActive == true
+          allow create: if validMessageCreate(parishId, roomId)
+          allow update: if validMessageDelete(parishId)
+          allow delete: if false
+        }
+      }
+
+      match /reports/{reportId} {
+        allow read, update: if isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        allow create: if validReportCreate(parishId)
+        allow delete: if false
+      }
+
+      match /bans/{uid} {
+        allow read: if isRole(parishId, ['moderator', 'admin', 'superadmin'])
+        allow create, update: if validBanWrite(parishId, uid)
+        allow delete: if false
+      }
+
+      match /announcements/{announcementId} {
+        allow read: if signedIn() && resource.data.isPublished == true
+        allow create, update, delete: if validAnnouncement(parishId)
+      }
+
+      match /events/{eventId} {
+        allow read: if signedIn() && resource.data.isPublished == true
+        allow create, update, delete: if validEvent(parishId)
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false
+    }
+  }
+}
