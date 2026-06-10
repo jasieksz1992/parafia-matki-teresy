@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:print": "tsx scripts/seed-print.ts"
+    "seed:print": "tsx scripts/seed-print.ts",
+    "deploy": "yarn build && firebase deploy"
   },
   "dependencies": {
     "firebase": "^11.0.0",
