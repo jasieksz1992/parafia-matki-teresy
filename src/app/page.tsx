@@ -209,19 +209,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section>
-        <div className='section-heading'>
+      <section className='cta-section' aria-labelledby='quick-actions-heading'>
+        <div className='section-heading cta-heading'>
           <p className='eyebrow'>Szybki dostęp</p>
-          <h2>Co możesz zrobić w aplikacji?</h2>
+          <h2 id='quick-actions-heading'>Najważniejsze akcje bez szukania po stronie</h2>
+          <p>Więcej oddechu, większe przyciski i prosty wybór: ogłoszenia, wydarzenia albo rozmowa ze wspólnotą.</p>
         </div>
-        <div className='cards feature-cards'>
+        <div className='cta-links'>
           {quickLinks.map(item => (
-            <article className='card feature-card' key={item.href}>
+            <Link className='cta-link' href={item.href} key={item.href}>
               <span className='feature-icon material-symbol' aria-hidden='true'>{item.icon}</span>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <Link href={item.href}>Przejdź dalej</Link>
-            </article>
+              <span>
+                <strong>{item.title}</strong>
+                <small>{item.description}</small>
+              </span>
+              <span className='material-symbol cta-arrow' aria-hidden='true'>arrow_forward</span>
+            </Link>
           ))}
         </div>
       </section>

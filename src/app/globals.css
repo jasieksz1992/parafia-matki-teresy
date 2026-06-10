@@ -1398,3 +1398,259 @@ nav a:hover {
     border-radius: 1.6rem;
   }
 }
+
+/* Spacious landing layout refinements */
+:root {
+  --content-max: 1440px;
+  --content-padding: clamp(1.25rem, 4vw, 4rem);
+  --section-gap: clamp(2.8rem, 6vw, 5.5rem);
+}
+
+.site-header {
+  width: min(var(--content-max), calc(100% - clamp(1rem, 3vw, 3rem)));
+}
+
+.container {
+  width: min(var(--content-max), 100%);
+  padding-inline: var(--content-padding);
+}
+
+.stack {
+  gap: var(--section-gap);
+}
+
+.home-stack {
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.hero {
+  padding: clamp(2rem, 5vw, 5.25rem);
+}
+
+.parish-hero {
+  min-height: min(760px, calc(100vh - 6rem));
+  border-radius: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+.parish-hero h1 {
+  max-width: 960px;
+  font-size: clamp(3rem, 7vw, 7rem);
+}
+
+.parish-hero .lead {
+  max-width: 720px;
+}
+
+.hero-copy {
+  max-width: 800px;
+  gap: clamp(1rem, 2vw, 1.45rem);
+}
+
+.hero-actions {
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.hero-actions .button {
+  min-height: 58px;
+  padding-inline: clamp(1.25rem, 2.4vw, 2rem);
+  font-size: 1.03rem;
+}
+
+.highlight-grid {
+  gap: clamp(1rem, 2vw, 1.6rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: clamp(-3rem, -4vw, -1.25rem);
+}
+
+.stat-card {
+  min-height: 170px;
+  padding: clamp(1.3rem, 2.4vw, 2rem);
+  box-shadow: 0 18px 45px rgba(94, 37, 16, 0.08);
+}
+
+.split-section,
+.mission-card,
+.contact-card,
+.cards,
+.photo-grid,
+.schedule-grid,
+.giving-grid,
+.cta-links {
+  gap: clamp(1.25rem, 2.5vw, 2.2rem);
+}
+
+.priority-section {
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+}
+
+.card,
+.panel,
+.message,
+.notice,
+.empty {
+  padding: clamp(1.35rem, 2.6vw, 2.25rem);
+}
+
+.schedule-card,
+.online-card,
+.bank-card,
+.mission-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 246, 238, 0.9) 100%);
+}
+
+.cta-section {
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 2.4rem);
+  padding: clamp(2rem, 5vw, 4.6rem);
+  border-radius: clamp(1.6rem, 3vw, 2.5rem);
+  background:
+    radial-gradient(circle at 7% 10%, rgba(255, 90, 53, 0.16), transparent 18rem),
+    radial-gradient(circle at 91% 8%, rgba(215, 164, 74, 0.18), transparent 16rem),
+    rgba(255, 255, 255, 0.54);
+}
+
+.cta-heading {
+  max-width: 880px;
+  margin-bottom: 0;
+}
+
+.cta-heading p:last-child {
+  max-width: 720px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.cta-links {
+  display: grid;
+}
+
+.cta-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  align-items: center;
+  min-height: 128px;
+  padding: clamp(1.15rem, 2.5vw, 2rem);
+  border: 1px solid rgba(255, 221, 191, 0.8);
+  border-radius: clamp(1.15rem, 2vw, 1.65rem);
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: 0 18px 50px rgba(94, 37, 16, 0.07);
+  transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.cta-link:hover {
+  background: white;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+.cta-link strong,
+.cta-link small {
+  display: block;
+}
+
+.cta-link strong {
+  margin-bottom: 0.35rem;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.1;
+}
+
+.cta-link small {
+  max-width: 56rem;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 1.4vw, 1.06rem);
+  font-weight: 650;
+}
+
+.cta-arrow {
+  display: grid;
+  width: 3.3rem;
+  height: 3.3rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #ff5a35;
+  color: white;
+  transition: transform 180ms ease;
+}
+
+.cta-link:hover .cta-arrow {
+  transform: translateX(5px);
+}
+
+.photo-section {
+  padding-inline: max(var(--content-padding), calc((100vw - var(--content-max)) / 2 + var(--content-padding)));
+}
+
+.photo-heading {
+  max-width: 920px;
+}
+
+.announcement-card,
+.event-card {
+  min-height: 0;
+}
+
+@media (min-width: 920px) {
+  .site-header {
+    grid-template-columns: minmax(260px, auto) 1fr auto;
+  }
+
+  .parish-hero {
+    grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
+  }
+
+  .cta-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cta-link {
+    grid-template-columns: 1fr;
+    align-content: space-between;
+  }
+
+  .cta-arrow {
+    justify-self: end;
+  }
+
+  .split-section,
+  .mission-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .priority-section {
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  }
+}
+
+@media (min-width: 1180px) {
+  .photo-grid {
+    grid-template-columns: 1.25fr 0.75fr;
+  }
+}
+
+@media (max-width: 919px) {
+  .priority-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 759px) {
+  .container {
+    padding-inline: 0.85rem;
+  }
+
+  .cta-link {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .cta-arrow {
+    grid-column: 2;
+    width: 2.8rem;
+    height: 2.8rem;
+    justify-self: start;
+  }
+}
