@@ -1000,3 +1000,401 @@ textarea {
     display: none;
   }
 }
+
+/* Warm church landing refresh inspired by modern ministry layouts. */
+body {
+  background:
+    radial-gradient(circle at 10% 2%, rgba(255, 90, 53, 0.14), transparent 25rem),
+    radial-gradient(circle at 88% 14%, rgba(246, 181, 77, 0.18), transparent 30rem),
+    linear-gradient(180deg, #fff9f1 0%, #ffffff 34%, #fff1eb 62%, #ffffff 100%);
+}
+
+body::before {
+  background-image:
+    linear-gradient(rgba(255, 90, 53, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 90, 53, 0.055) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+body::after {
+  background: rgba(255, 90, 53, 0.14);
+}
+
+.site-header {
+  width: min(1080px, calc(100% - 2rem));
+  margin-top: 0.65rem;
+  border-color: rgba(255, 221, 191, 0.92);
+  border-radius: 1.6rem;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 50px rgba(51, 25, 11, 0.1);
+}
+
+.brand::before,
+.hero-mark {
+  background: linear-gradient(135deg, #ff5a35, #f6b54d);
+  color: white;
+}
+
+nav a.active,
+nav a:hover {
+  background: #fff0dc;
+  color: #c24421;
+}
+
+.container {
+  width: min(1080px, 100%);
+}
+
+.home-stack {
+  gap: clamp(2rem, 5vw, 4.2rem);
+}
+
+.parish-hero {
+  min-height: 650px;
+  border: 0;
+  border-radius: 0 0 2.4rem 2.4rem;
+  background:
+    linear-gradient(180deg, rgba(29, 17, 11, 0.28), rgba(29, 17, 11, 0.78)),
+    url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1800&q=82') center / cover;
+  box-shadow: 0 32px 80px rgba(47, 20, 10, 0.22);
+}
+
+.parish-hero::before {
+  inset: auto 0 0 0;
+  width: auto;
+  height: 4.5rem;
+  border-radius: 0;
+  background: repeating-linear-gradient(90deg, #ff5a35 0 126px, #f76b3f 126px 252px);
+  opacity: 0.98;
+  mask-image: linear-gradient(to top, #000, transparent 100%);
+}
+
+.parish-hero::after {
+  top: 11%;
+  right: 12%;
+  width: 18rem;
+  height: 18rem;
+  background: rgba(255, 90, 53, 0.2);
+  filter: blur(28px);
+}
+
+.hero-copy {
+  max-width: 670px;
+}
+
+.hero-chip,
+.hero-badges span {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.14);
+  text-transform: uppercase;
+}
+
+.parish-hero h1 {
+  font-size: clamp(2.7rem, 7.4vw, 5.9rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.parish-hero .lead {
+  max-width: 610px;
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 600;
+}
+
+.button {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff5a35, #df4528);
+  box-shadow: 0 16px 32px rgba(223, 69, 40, 0.28);
+}
+
+.button.secondary,
+.parish-hero .button.secondary {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2a1710;
+}
+
+.hero-visual {
+  min-height: 500px;
+  align-items: center;
+  justify-items: center;
+}
+
+.hero-photo-wrap {
+  position: absolute;
+  inset: 1.4rem 1.1rem 6.2rem 4.2rem;
+  overflow: hidden;
+  border: 8px solid rgba(255, 255, 255, 0.96);
+  border-radius: 1.4rem;
+  box-shadow: 0 34px 82px rgba(0, 0, 0, 0.35);
+  transform: rotate(2deg);
+}
+
+.hero-photo {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+.hero-visual::before {
+  inset: 1.4rem 1.1rem 6.2rem 4.2rem;
+  border-radius: 1.4rem;
+  background: linear-gradient(180deg, rgba(255, 90, 53, 0.04), rgba(0, 0, 0, 0.48));
+  transform: rotate(2deg);
+}
+
+.hero-card {
+  width: min(420px, calc(100% - 1rem));
+  margin: 7rem 0 0;
+  border-color: rgba(255, 255, 255, 0.35);
+  border-radius: 1.8rem;
+  background: rgba(23, 13, 10, 0.78);
+  color: white;
+}
+
+.hero-card strong {
+  text-wrap: balance;
+}
+
+.hero-church-mark {
+  position: absolute;
+  top: -1.1rem;
+  right: 0.1rem;
+  z-index: 3;
+  width: 9.5rem;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.22));
+}
+
+.church-loader-mark,
+.route-loader__church {
+  overflow: visible;
+}
+
+.church-loader-mark__halo,
+.route-loader__halo {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2;
+  transform-origin: 90px 90px;
+  animation: churchPulse 2.2s ease-in-out infinite;
+}
+
+.church-loader-mark__stroke,
+.route-loader__line {
+  fill: none;
+  stroke: url('#churchGold');
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url('#churchGlow');
+  stroke-dasharray: 430;
+  stroke-dashoffset: 430;
+  animation: churchDraw 2.4s ease-in-out infinite;
+}
+
+.church-loader-mark__body,
+.route-loader__body {
+  animation-delay: 140ms;
+}
+
+.church-loader-mark__cross,
+.route-loader__cross {
+  animation-delay: 280ms;
+}
+
+.church-loader-mark__window,
+.route-loader__window {
+  animation-delay: 420ms;
+}
+
+.route-loader__line {
+  stroke: url('#routeLoaderGold');
+  filter: drop-shadow(0 0 8px rgba(255, 90, 53, 0.34));
+}
+
+.hero-orbit {
+  background: #fff6ef;
+  color: #ff5a35;
+}
+
+.hero-orbit-one {
+  right: -0.7rem;
+}
+
+.hero-orbit-two {
+  left: 2rem;
+  bottom: 24%;
+}
+
+.highlight-grid {
+  margin-top: -2.3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-card {
+  border-color: rgba(255, 221, 191, 0.9);
+  border-radius: 1.7rem;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.stat-card strong {
+  color: #c24421;
+}
+
+.icon-bubble,
+.feature-icon,
+.schedule-icon {
+  background: #fff0dc;
+  color: #ff5a35;
+}
+
+.panel-icon {
+  background: #fff0dc;
+  color: #ff5a35;
+}
+
+.card,
+.panel,
+.message,
+.notice,
+.empty {
+  border-color: rgba(255, 221, 191, 0.9);
+  border-radius: 1.7rem;
+}
+
+.schedule-card,
+.online-card,
+.bank-card,
+.mission-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fff3eb 100%);
+}
+
+.photo-section {
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(2.8rem, 7vw, 5.5rem) max(clamp(1rem, 4vw, 2rem), calc((100vw - 1080px) / 2));
+  background: #fff0eb;
+}
+
+.photo-heading {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.photo-heading .eyebrow,
+.section-heading .eyebrow {
+  color: #ff5a35;
+}
+
+.photo-grid {
+  align-items: stretch;
+}
+
+.photo-card {
+  min-height: 340px;
+  border: 0;
+  border-radius: 0.7rem 0.7rem 3.8rem 0.7rem;
+  box-shadow: 0 24px 64px rgba(94, 37, 16, 0.16);
+}
+
+.photo-card::after {
+  background: linear-gradient(180deg, rgba(36, 12, 5, 0.04), rgba(36, 12, 5, 0.72));
+}
+
+.feature-card::after {
+  background: #ff5a35;
+  color: white;
+}
+
+.mission-card {
+  border: 0;
+  box-shadow: none;
+}
+
+.route-loader {
+  display: grid;
+  min-height: min(70vh, 680px);
+  place-items: center;
+  align-content: center;
+  gap: 0.65rem;
+  padding: 2rem;
+  color: #2a1710;
+  text-align: center;
+}
+
+.route-loader__church {
+  width: clamp(8rem, 18vw, 12rem);
+  padding: 0.45rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 90, 53, 0.16), transparent 64%);
+}
+
+.route-loader strong {
+  color: #c24421;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 1;
+}
+
+.route-loader span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+@keyframes churchDraw {
+  0% {
+    stroke-dashoffset: 430;
+    opacity: 0.45;
+  }
+  45%, 68% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -430;
+    opacity: 0.45;
+  }
+}
+
+@keyframes churchPulse {
+  0%, 100% {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 920px) {
+  .parish-hero {
+    grid-template-columns: minmax(0, 0.9fr) minmax(380px, 0.8fr);
+  }
+}
+
+@media (max-width: 759px) {
+  .parish-hero {
+    border-radius: 1.7rem;
+  }
+
+  .hero-photo-wrap,
+  .hero-visual::before {
+    inset: 1rem 0.6rem 4.8rem 0.6rem;
+    transform: rotate(0deg);
+  }
+
+  .hero-church-mark {
+    right: -1.2rem;
+    width: 7.4rem;
+  }
+
+  .hero-card {
+    width: 100%;
+    margin-top: 6rem;
+  }
+
+  .photo-section {
+    margin-inline: 0;
+    border-radius: 1.6rem;
+  }
+}
