@@ -1654,3 +1654,291 @@ nav a:hover {
     justify-self: start;
   }
 }
+
+/* Full-screen photographic sliders and richer parish sections. */
+.parish-hero {
+  min-height: min(920px, calc(100vh - 1.5rem));
+  padding-block: clamp(2rem, 8vh, 6rem);
+}
+
+.hero-background-slider,
+.hero-background-slide,
+.hero-mini-slider,
+.hero-mini-slide {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-background-slider {
+  z-index: -2;
+  overflow: hidden;
+}
+
+.hero-background-slide,
+.hero-mini-slide {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-background-slide {
+  opacity: 0;
+  transform: scale(1.04);
+  animation: heroPhotoFade 18s ease-in-out infinite;
+}
+
+.hero-background-slide-2,
+.hero-mini-slide-2 {
+  animation-delay: 6s;
+}
+
+.hero-background-slide-3,
+.hero-mini-slide-3 {
+  animation-delay: 12s;
+}
+
+.hero-mini-slider {
+  overflow: hidden;
+  border-radius: 1.8rem;
+}
+
+.hero-mini-slide {
+  opacity: 0;
+  animation: heroMiniFade 18s ease-in-out infinite;
+}
+
+.hero-visual::before {
+  pointer-events: none;
+}
+
+.content-panel {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.section-lead {
+  max-width: 660px;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.announcement-showcase,
+.parish-matters-section,
+.contact-section {
+  align-items: stretch;
+}
+
+.announcement-showcase,
+.parish-matters-section {
+  padding: clamp(1rem, 3vw, 1.25rem);
+  border: 1px solid rgba(234, 223, 204, 0.88);
+  border-radius: 1.8rem;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: var(--shadow-soft);
+}
+
+.media-slider {
+  display: grid;
+  grid-auto-columns: minmax(78%, 1fr);
+  grid-auto-flow: column;
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 0 0 0.8rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: #df4528 #fff0dc;
+}
+
+.media-slide {
+  position: relative;
+  display: grid;
+  min-height: 430px;
+  align-items: end;
+  overflow: hidden;
+  border-radius: 1.45rem;
+  background: #241a12;
+  box-shadow: 0 22px 56px rgba(47, 20, 10, 0.18);
+  isolation: isolate;
+  scroll-snap-align: start;
+}
+
+.media-slide img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 460ms ease;
+}
+
+.media-slide::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(36, 26, 18, 0.08) 12%, rgba(36, 26, 18, 0.82));
+  content: '';
+}
+
+.media-slide:hover img {
+  transform: scale(1.055);
+}
+
+.media-slide > div {
+  display: grid;
+  gap: 0.55rem;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  color: white;
+}
+
+.media-slide .feature-icon {
+  margin: 0;
+  background: rgba(255, 255, 255, 0.92);
+  color: #df4528;
+}
+
+.media-slide h3,
+.media-slide p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.media-slide h3 {
+  color: white;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.02;
+}
+
+.section-actions {
+  margin-top: 0.35rem;
+}
+
+.contact-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.contact-info-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 96% 10%, rgba(255, 90, 53, 0.13), transparent 13rem),
+    linear-gradient(135deg, #ffffff 0%, #fff4e5 100%);
+}
+
+.contact-detail-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.contact-detail-grid p {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.9rem;
+  margin: 0;
+  border: 1px solid rgba(234, 223, 204, 0.9);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.contact-detail-grid .material-symbol {
+  color: #df4528;
+}
+
+.contact-slider .media-slide {
+  min-height: 360px;
+}
+
+.contact-slide h3 {
+  max-width: 28rem;
+}
+
+@keyframes heroPhotoFade {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  6%, 32% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes heroMiniFade {
+  0%, 100% {
+    opacity: 0;
+  }
+  6%, 32% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 920px) {
+  .announcement-showcase,
+  .parish-matters-section,
+  .contact-section {
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.9fr);
+  }
+
+  .parish-matters-section {
+    grid-template-columns: minmax(380px, 0.9fr) minmax(0, 1fr);
+  }
+
+  .media-slider {
+    grid-auto-columns: 86%;
+  }
+}
+
+@media (max-width: 759px) {
+  .parish-hero {
+    min-height: calc(100vh - 1rem);
+    border-radius: 0 0 1.6rem 1.6rem;
+  }
+
+  .media-slider {
+    grid-auto-columns: 88%;
+  }
+
+  .media-slide {
+    min-height: 360px;
+  }
+}
+
+.parish-hero {
+  background: #241a12;
+}
+
+.hero-background-slider {
+  z-index: 0;
+}
+
+.hero-background-slider::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 90, 53, 0.24), transparent 24rem),
+    linear-gradient(90deg, rgba(29, 17, 11, 0.78), rgba(29, 17, 11, 0.36) 52%, rgba(29, 17, 11, 0.7)),
+    linear-gradient(180deg, rgba(29, 17, 11, 0.08), rgba(29, 17, 11, 0.76));
+  content: '';
+}
+
+.hero-copy,
+.hero-visual {
+  z-index: 2;
+}
+
+.parish-hero::before,
+.parish-hero::after {
+  z-index: 1;
+  pointer-events: none;
+}
