@@ -49,6 +49,21 @@ const serviceCards = [
   'Pomoc sąsiedzka w duchu Matki Teresy',
 ]
 
+const heroSlides = [
+  {
+    src: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=2200&q=82',
+    alt: 'Kościół oświetlony ciepłym światłem',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=2200&q=82',
+    alt: 'Rozświetlone wnętrze kościoła podczas modlitwy',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1473177104440-ffee2f376098?auto=format&fit=crop&w=2200&q=82',
+    alt: 'Detal sakralnej architektury z łukami i światłem',
+  },
+]
+
 const parishPhotos = [
   {
     src: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80',
@@ -71,6 +86,66 @@ const parishPhotos = [
 ]
 
 const heroBadges = ['Niedziela 10:00', 'Ogłoszenia', 'Transmisje online']
+
+const announcementSlides = [
+  {
+    icon: 'campaign',
+    title: 'Ogłoszenia tygodnia',
+    text: 'Najważniejsze komunikaty duszpasterskie, zbiórki i zaproszenia widoczne od razu po wejściu.',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    icon: 'volunteer_activism',
+    title: 'Pomoc i zbiórki',
+    text: 'Miejsca, w których parafianie mogą szybko sprawdzić, gdzie potrzeba wsparcia i obecności.',
+    image: 'https://images.unsplash.com/photo-1494386346843-e12284507169?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    icon: 'notifications_active',
+    title: 'Pilne informacje',
+    text: 'Przypięte wpisy i czytelne karty wyróżniają sprawy wymagające szybkiej reakcji.',
+    image: 'https://images.unsplash.com/photo-1518128958364-65859d70aa41?auto=format&fit=crop&w=1000&q=80',
+  },
+]
+
+const parishMatterSlides = [
+  {
+    icon: 'diversity_3',
+    title: 'Sprawy wspólnoty',
+    text: 'Intencje, prośby organizacyjne i sąsiedzka pomoc mają własną, spokojną przestrzeń rozmowy.',
+    image: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    icon: 'event',
+    title: 'Wydarzenia i dyżury',
+    text: 'Kalendarz prowadzi do nabożeństw, spotkań i transmisji bez przeklikiwania kolejnych podstron.',
+    image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    icon: 'favorite',
+    title: 'Bliskość patronki',
+    text: 'Układ strony podkreśla prostotę, służbę i realne potrzeby ludzi wokół parafii.',
+    image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1000&q=80',
+  },
+]
+
+const contactSlides = [
+  {
+    title: 'Kancelaria',
+    text: parishContact.address,
+    image: 'https://images.unsplash.com/photo-1499092346589-b9b6be3e94b2?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    title: 'Duszpasterze',
+    text: `${parishContact.pastorPhone} · ${parishContact.vicarPhone}`,
+    image: 'https://images.unsplash.com/photo-1544531585-9847b68c8c86?auto=format&fit=crop&w=1000&q=80',
+  },
+  {
+    title: 'Wspólnota online',
+    text: 'Pytania, intencje i sprawy parafialne w jednym miejscu.',
+    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=80',
+  },
+]
 
 function ChurchLoaderMark({ className = '' }: { className?: string }) {
   return (
@@ -102,6 +177,19 @@ export default function HomePage() {
   return (
     <div className='stack home-stack'>
       <section className='hero parish-hero'>
+        <div className='hero-background-slider' aria-hidden='true'>
+          {heroSlides.map((slide, index) => (
+            <Image
+              className={`hero-background-slide hero-background-slide-${index + 1}`}
+              src={slide.src}
+              alt=''
+              fill
+              priority={index === 0}
+              sizes='100vw'
+              key={slide.src}
+            />
+          ))}
+        </div>
         <div className='hero-copy'>
           <div className='hero-chip'><span className='material-symbol' aria-hidden='true'>auto_awesome</span> Nowa parafialna aplikacja</div>
           <p className='eyebrow'>Parafia rzymskokatolicka w Koszalinie</p>
@@ -119,15 +207,18 @@ export default function HomePage() {
           </div>
         </div>
         <div className='hero-visual' aria-label='Zdjęcie i wizytówka parafii'>
-          <div className='hero-photo-wrap'>
-            <Image
-              className='hero-photo'
-              src={parishPhotos[0].src}
-              alt={parishPhotos[0].alt}
-              fill
-              priority
-              sizes='(min-width: 920px) 48vw, 100vw'
-            />
+          <div className='hero-photo-wrap hero-mini-slider'>
+            {parishPhotos.map((photo, index) => (
+              <Image
+                className={`hero-photo hero-mini-slide hero-mini-slide-${index + 1}`}
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                priority={index === 0}
+                sizes='(min-width: 920px) 42vw, 100vw'
+                key={photo.src}
+              />
+            ))}
           </div>
           <ChurchLoaderMark className='hero-church-mark' />
           <div className='hero-card floating-card'>
@@ -229,16 +320,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className='split-section'>
-        <div>
+      <section className='split-section announcement-showcase'>
+        <div className='content-panel'>
           <p className='eyebrow'>Aktualności</p>
-          <h2>Najnowsze ogłoszenia</h2>
+          <h2>Najnowsze ogłoszenia w bardziej czytelnej sekcji</h2>
+          <p className='section-lead'>Komunikaty są połączone ze zdjęciowym sliderem, żeby ważne informacje nie ginęły między innymi blokami strony.</p>
           <AnnouncementList />
         </div>
-        <div>
-          <p className='eyebrow'>Kalendarz</p>
-          <h2>Nadchodzące wydarzenia</h2>
+        <div className='media-slider' aria-label='Slider wyróżniający ogłoszenia parafialne'>
+          {announcementSlides.map(item => (
+            <article className='media-slide' key={item.title}>
+              <Image src={item.image} alt='' fill sizes='(min-width: 920px) 42vw, 100vw' />
+              <div>
+                <span className='feature-icon material-symbol' aria-hidden='true'>{item.icon}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className='split-section parish-matters-section'>
+        <div className='media-slider' aria-label='Slider spraw parafialnych'>
+          {parishMatterSlides.map(item => (
+            <article className='media-slide' key={item.title}>
+              <Image src={item.image} alt='' fill sizes='(min-width: 920px) 42vw, 100vw' />
+              <div>
+                <span className='feature-icon material-symbol' aria-hidden='true'>{item.icon}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className='content-panel'>
+          <p className='eyebrow'>Sprawy parafii</p>
+          <h2>Wydarzenia, intencje i codzienne potrzeby wspólnoty</h2>
+          <p className='section-lead'>Ta część łączy kalendarz z jasnym zaproszeniem do rozmowy — od nabożeństw po zwykłe pytania organizacyjne.</p>
           <EventList />
+          <div className='actions section-actions'>
+            <Link className='button' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Przejdź do wspólnoty</Link>
+            <Link className='button secondary' href='/events'><span className='material-symbol' aria-hidden='true'>event</span> Zobacz wydarzenia</Link>
+          </div>
         </div>
       </section>
 
@@ -264,15 +388,33 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section id='kontakt' className='card contact-card'>
-        <div>
-          <p className='eyebrow'>Kontakt</p>
-          <h2>{parishContact.name}</h2>
-          <p><strong>{parishContact.address}</strong></p>
-          <p>{parishContact.pastor}: <a href={`tel:${parishContact.pastorPhone.replaceAll(' ', '')}`}>{parishContact.pastorPhone}</a></p>
-          <p>{parishContact.vicar} ({parishContact.vicarNote}): <a href={`tel:${parishContact.vicarPhone.replaceAll(' ', '')}`}>{parishContact.vicarPhone}</a></p>
+      <section id='kontakt' className='contact-section'>
+        <div className='card contact-card contact-info-card'>
+          <div>
+            <p className='eyebrow'>Kontakt</p>
+            <h2>{parishContact.name}</h2>
+            <div className='contact-detail-grid'>
+              <p><span className='material-symbol' aria-hidden='true'>location_on</span><strong>{parishContact.address}</strong></p>
+              <p><span className='material-symbol' aria-hidden='true'>person</span>{parishContact.pastor}: <a href={`tel:${parishContact.pastorPhone.replaceAll(' ', '')}`}>{parishContact.pastorPhone}</a></p>
+              <p><span className='material-symbol' aria-hidden='true'>medical_services</span>{parishContact.vicar} ({parishContact.vicarNote}): <a href={`tel:${parishContact.vicarPhone.replaceAll(' ', '')}`}>{parishContact.vicarPhone}</a></p>
+            </div>
+          </div>
+          <div className='actions section-actions'>
+            <Link className='button' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Zadaj pytanie</Link>
+            <a className='button secondary' href={officialSiteUrl} target='_blank' rel='noreferrer'><span className='material-symbol' aria-hidden='true'>language</span> Oficjalna strona</a>
+          </div>
         </div>
-        <Link className='button secondary' href='/community'><span className='material-symbol' aria-hidden='true'>forum</span> Zadaj pytanie we wspólnocie</Link>
+        <div className='media-slider contact-slider' aria-label='Slider kontaktowy ze zdjęciami'>
+          {contactSlides.map(item => (
+            <article className='media-slide contact-slide' key={item.title}>
+              <Image src={item.image} alt='' fill sizes='(min-width: 920px) 42vw, 100vw' />
+              <div>
+                <p className='eyebrow'>{item.title}</p>
+                <h3>{item.text}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
     </div>
   )
