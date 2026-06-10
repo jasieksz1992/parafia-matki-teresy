@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import AnnouncementList from '@/components/AnnouncementList'
 import EventList from '@/components/EventList'
@@ -42,6 +43,27 @@ const serviceCards = [
   'Pomoc sąsiedzka w duchu Matki Teresy',
 ]
 
+const parishPhotos = [
+  {
+    src: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Rozświetlone wnętrze kościoła podczas modlitwy',
+    title: 'Liturgia',
+    description: 'Najważniejsze godziny Mszy i nabożeństw bez szukania po całej stronie.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1473177104440-ffee2f376098?auto=format&fit=crop&w=900&q=80',
+    alt: 'Detal sakralnej architektury z łukami i światłem',
+    title: 'Przestrzeń modlitwy',
+    description: 'Czytelny układ dla parafian, gości i osób wracających do wspólnoty.',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1519491050282-cf00c82424b4?auto=format&fit=crop&w=900&q=80',
+    alt: 'Płonące świece jako znak pamięci i intencji',
+    title: 'Intencje',
+    description: 'Wspólnota online na prośby, pytania i sąsiedzką pomoc.',
+  },
+]
+
 export default function HomePage() {
   return (
     <div className='stack home-stack'>
@@ -58,12 +80,22 @@ export default function HomePage() {
             <Link className='button secondary' href='#msze'>Godziny Mszy Św.</Link>
           </div>
         </div>
-        <div className='hero-card' aria-label='Wizytówka parafii'>
-          <div className='hero-mark'>MT</div>
-          <p className='hero-card-label'>Adres kancelarii</p>
-          <strong>{parishContact.address}</strong>
-          <span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
-          <span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
+        <div className='hero-visual' aria-label='Zdjęcie i wizytówka parafii'>
+          <Image
+            className='hero-photo'
+            src={parishPhotos[0].src}
+            alt={parishPhotos[0].alt}
+            fill
+            priority
+            sizes='(min-width: 920px) 48vw, 100vw'
+          />
+          <div className='hero-card'>
+            <div className='hero-mark'>MT</div>
+            <p className='hero-card-label'>Adres kancelarii</p>
+            <strong>{parishContact.address}</strong>
+            <span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
+            <span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
+          </div>
         </div>
       </section>
 
@@ -106,6 +138,30 @@ export default function HomePage() {
             <a className='button secondary' href={officialSiteUrl} target='_blank' rel='noreferrer'>Strona parafii</a>
           </div>
         </article>
+      </section>
+
+
+      <section className='photo-section' aria-label='Zdjęcia parafialne'>
+        <div className='section-heading photo-heading'>
+          <p className='eyebrow'>Zdjęcia i klimat miejsca</p>
+          <h2>Strona od razu wygląda jak żywa parafia, nie jak surowy panel</h2>
+        </div>
+        <div className='photo-grid'>
+          {parishPhotos.map((photo, index) => (
+            <article className={`photo-card photo-card-${index + 1}`} key={photo.title}>
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes={index === 0 ? '(min-width: 920px) 58vw, 100vw' : '(min-width: 920px) 42vw, 100vw'}
+              />
+              <div>
+                <p className='eyebrow'>{photo.title}</p>
+                <p>{photo.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section>
