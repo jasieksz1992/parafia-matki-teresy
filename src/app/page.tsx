@@ -1,19 +1,20 @@
 import Link from 'next/link'
 import AnnouncementList from '@/components/AnnouncementList'
 import EventList from '@/components/EventList'
+import { givingAccounts, massSchedule, officialSiteUrl, parishContact, parishStory, youtubeUrl } from '@/lib/parish-data'
 
 const parishHighlights = [
   {
-    value: 'Koszalin',
-    label: 'lokalna wspólnota parafialna',
+    value: 'Koszalin · Jamno',
+    label: 'wspólnota parafialna i kościół filialny',
   },
   {
-    value: 'św. Matka Teresa',
-    label: 'patronka codziennej służby i bliskości',
+    value: parishContact.founded,
+    label: 'data wejścia w życie dekretu erygującego parafię',
   },
   {
-    value: 'Online + parafia',
-    label: 'ogłoszenia, wydarzenia i rozmowy w jednym miejscu',
+    value: 'Msze i kontakt',
+    label: 'najważniejsze informacje dostępne od razu na starcie',
   },
 ]
 
@@ -21,17 +22,17 @@ const quickLinks = [
   {
     href: '/announcements',
     title: 'Ogłoszenia parafialne',
-    description: 'Najważniejsze informacje duszpasterskie, komunikaty i aktualności z życia parafii.',
+    description: 'Skrót najnowszych komunikatów duszpasterskich i link do pełnej treści na stronie parafii.',
   },
   {
     href: '/events',
-    title: 'Wydarzenia i spotkania',
-    description: 'Zobacz nadchodzące inicjatywy, spotkania formacyjne i wydarzenia wspólnotowe.',
+    title: 'Wydarzenia i nabożeństwa',
+    description: 'Nabożeństwa czerwcowe, transmisje online i inicjatywy, które warto mieć pod ręką.',
   },
   {
     href: '/community',
     title: 'Wspólnota online',
-    description: 'Dołącz do rozmów parafian, poproś o modlitwę albo zaoferuj sąsiedzką pomoc.',
+    description: 'Miejsce na intencje, pytania organizacyjne oraz pomoc sąsiedzką w duchu św. Matki Teresy.',
   },
 ]
 
@@ -47,21 +48,22 @@ export default function HomePage() {
       <section className='hero parish-hero'>
         <div className='hero-copy'>
           <p className='eyebrow'>Parafia rzymskokatolicka w Koszalinie</p>
-          <h1>Kościół pw. św. Matki Teresy z Kalkuty</h1>
+          <h1>Parafia św. Matki Teresy z Kalkuty</h1>
           <p className='lead'>
-            Nowoczesne centrum informacji dla parafian i gości: ogłoszenia, wydarzenia,
-            wspólnota oraz bezpieczna przestrzeń rozmowy dla parafii Matki Teresy z Kalkuty w Koszalinie.
+            Przejrzysta strona startowa dla parafian i gości: aktualne ogłoszenia, godziny Mszy Świętych,
+            kontakt do duszpasterzy, transmisje online oraz przestrzeń rozmowy wspólnoty.
           </p>
           <div className='actions'>
-            <Link className='button' href='/community'>Wejdź do wspólnoty</Link>
-            <Link className='button secondary' href='/announcements'>Zobacz ogłoszenia</Link>
+            <Link className='button' href='/announcements'>Sprawdź ogłoszenia</Link>
+            <Link className='button secondary' href='#msze'>Godziny Mszy Św.</Link>
           </div>
         </div>
         <div className='hero-card' aria-label='Wizytówka parafii'>
           <div className='hero-mark'>MT</div>
-          <p className='hero-card-label'>Parafia Matki Teresy</p>
-          <strong>Koszalin</strong>
-          <span>W duchu bliskości, prostoty i służby drugiemu człowiekowi.</span>
+          <p className='hero-card-label'>Adres kancelarii</p>
+          <strong>{parishContact.address}</strong>
+          <span>{parishContact.pastor}: {parishContact.pastorPhone}</span>
+          <span>{parishContact.vicar}: {parishContact.vicarPhone}</span>
         </div>
       </section>
 
@@ -72,6 +74,38 @@ export default function HomePage() {
             <span>{item.label}</span>
           </article>
         ))}
+      </section>
+
+      <section className='split-section priority-section'>
+        <article id='msze' className='card schedule-card'>
+          <p className='eyebrow'>Msze święte i nabożeństwa</p>
+          <h2>Plan liturgii</h2>
+          <div className='schedule-grid'>
+            {massSchedule.map(place => (
+              <div className='schedule-place' key={place.place}>
+                <h3>{place.place}</h3>
+                {place.rows.map(row => (
+                  <p key={row.label}>
+                    <span>{row.label}</span>
+                    <strong>{row.value}</strong>
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </article>
+        <article className='card online-card'>
+          <p className='eyebrow'>Online</p>
+          <h2>Transmisje z Jamna</h2>
+          <p>
+            Oficjalna strona parafii publikuje transmisje Mszy Świętej z kościoła filialnego pw. Matki Bożej
+            Różańcowej w Jamnie. Ostatni wskazany termin to niedziela, godz. 10:00.
+          </p>
+          <div className='actions'>
+            <a className='button' href={youtubeUrl} target='_blank' rel='noreferrer'>Otwórz YouTube</a>
+            <a className='button secondary' href={officialSiteUrl} target='_blank' rel='noreferrer'>Strona parafii</a>
+          </div>
+        </article>
       </section>
 
       <section>
@@ -105,26 +139,33 @@ export default function HomePage() {
 
       <section className='card mission-card'>
         <div>
-          <p className='eyebrow'>Duch patronki</p>
+          <p className='eyebrow'>Historia i duch patronki</p>
           <h2>Parafia blisko codziennych spraw</h2>
-          <p>
-            Aplikacja pomaga budować widoczną, życzliwą i uporządkowaną komunikację parafialną —
-            tak, aby osoby z Koszalina od razu wiedziały, że są we właściwym miejscu.
-          </p>
+          {parishStory.map(item => <p key={item}>{item}</p>)}
         </div>
         <ul className='check-list'>
           {serviceCards.map(item => <li key={item}>{item}</li>)}
         </ul>
       </section>
 
+      <section className='cards giving-grid' aria-label='Konta bankowe parafii'>
+        {givingAccounts.map(item => (
+          <article className='card bank-card' key={item.title}>
+            <p className='eyebrow'>Wsparcie</p>
+            <h3>{item.title}</h3>
+            <p>{item.note}</p>
+            <strong>{item.account}</strong>
+          </article>
+        ))}
+      </section>
+
       <section id='kontakt' className='card contact-card'>
         <div>
           <p className='eyebrow'>Kontakt</p>
-          <h2>Parafia św. Matki Teresy z Kalkuty w Koszalinie</h2>
-          <p>
-            To miejsce można uzupełnić o aktualny adres kancelarii, godziny dyżurów i telefon parafii.
-            Już teraz strona jasno identyfikuje wspólnotę i prowadzi do najważniejszych działów aplikacji.
-          </p>
+          <h2>{parishContact.name}</h2>
+          <p><strong>{parishContact.address}</strong></p>
+          <p>{parishContact.pastor}: <a href={`tel:${parishContact.pastorPhone.replaceAll(' ', '')}`}>{parishContact.pastorPhone}</a></p>
+          <p>{parishContact.vicar} ({parishContact.vicarNote}): <a href={`tel:${parishContact.vicarPhone.replaceAll(' ', '')}`}>{parishContact.vicarPhone}</a></p>
         </div>
         <Link className='button secondary' href='/community'>Zadaj pytanie we wspólnocie</Link>
       </section>
